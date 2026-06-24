@@ -1,0 +1,14 @@
+/build/
+/.claude/
+/.vscode/
+*.so
+*.a
+*.o
+*.py[cod]
+__pycache__/
+.pytest_cache/
+/tmp_inputs/
+/tmp_outputs/
+/tmp_review_inputs/
+/tmp_review_outputs/
+/tmp_review_stdout/

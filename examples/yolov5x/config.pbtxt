@@ -1,0 +1,41 @@
+name: "yolov5x_bpu"
+backend: "bpu"
+max_batch_size: 0
+
+input [
+  {
+    name: "data_y"
+    data_type: TYPE_UINT8
+    dims: [1, 672, 672, 1]
+  },
+  {
+    name: "data_uv"
+    data_type: TYPE_UINT8
+    dims: [1, 336, 336, 2]
+  }
+]
+
+output [
+  {
+    name: "output"
+    data_type: TYPE_INT32
+    dims: [1, 84, 84, 255]
+  },
+  {
+    name: "1310"
+    data_type: TYPE_INT32
+    dims: [1, 42, 42, 255]
+  },
+  {
+    name: "1312"
+    data_type: TYPE_INT32
+    dims: [1, 21, 21, 255]
+  }
+]
+
+instance_group [
+  {
+    count: 1
+    kind: KIND_CPU
+  }
+]
