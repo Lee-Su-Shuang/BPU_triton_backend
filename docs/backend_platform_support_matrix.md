@@ -1,90 +1,43 @@
-<!--
-# Copyright 2022-2026, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions
-# are met:
-#  * Redistributions of source code must retain the above copyright
-#    notice, this list of conditions and the following disclaimer.
-#  * Redistributions in binary form must reproduce the above copyright
-#    notice, this list of conditions and the following disclaimer in the
-#    documentation and/or other materials provided with the distribution.
-#  * Neither the name of NVIDIA CORPORATION nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS'' AND ANY
-# EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-# PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
-# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-# PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
-# OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
--->
+# 平台支持矩阵说明
 
-# Backend-Platform Support Matrix
-
-Even though Triton supports inference across various platforms such as
-cloud, data center, edge and embedded devices on NVIDIA GPUs, x86 and
-ARM CPU, or AWS Inferentia, it does so by relying on the backends.
-Note that not all Triton backends support every platform. The purpose
-of this document is to go over what all compute platforms are supported
-by each of these Triton backends.
-GPU in this document refers to Nvidia GPU. See
-[GPU, Driver, and CUDA Support Matrix](https://docs.nvidia.com/deeplearning/frameworks/support-matrix/index.html)
-to learn more about supported GPUs.
+> 说明：本文件保留原始上游 Triton 平台兼容性信息，用于参考不同后端在不同平台上的支持情况。
 
 ## Ubuntu 22.04
 
-The table below describes target device(s) supported for inference by
-each backend on different platforms.
+下表描述了各后端在不同平台上的推理支持情况。
 
-| Backend      | x86       | ARM-SBSA      |
-| ------------ | --------- | ------------- |
-| TensorRT     |  :heavy_check_mark: GPU <br/> :x: CPU | :heavy_check_mark: GPU <br/> :x: CPU       |
-| ONNX Runtime |  :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU  |   :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU      |
-| TensorFlow   |  :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU  |   :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU      |
-| PyTorch      |  :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU  |   :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU      |
-| OpenVINO     |  :x: GPU <br/> :heavy_check_mark: CPU    |     :x: GPU <br/> :x: CPU       |
-| Python[^1]   |  :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU  |  :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU  |
-| DALI         |  :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU  | :heavy_check_mark: GPU[^2] <br/> :heavy_check_mark: CPU[^2] |
-| FIL          |  :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU  |  Unsupported  |
-| TensorRT-LLM |  :heavy_check_mark: GPU <br/> :x: CPU | :heavy_check_mark: GPU <br/> :x: CPU       |
-| vLLM         |  :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU  |  Unsupported  |
-
+| 后端 | x86 | ARM-SBSA |
+| --- | --- | --- |
+| TensorRT | GPU / CPU | GPU / CPU |
+| ONNX Runtime | GPU / CPU | GPU / CPU |
+| TensorFlow | GPU / CPU | GPU / CPU |
+| PyTorch | GPU / CPU | GPU / CPU |
+| OpenVINO | CPU | 不支持 GPU / CPU |
+| Python | GPU / CPU | GPU / CPU |
+| DALI | GPU / CPU | GPU / CPU |
+| FIL | GPU / CPU | 不支持 |
+| TensorRT-LLM | GPU | GPU |
+| vLLM | GPU / CPU | 不支持 |
 
 ## Jetson JetPack
 
-Following backends are currently supported on Jetson Jetpack:
+以下后端目前支持 Jetson JetPack：
 
-| Backend      |   Jetson  |
-| ------------ | --------- |
-| TensorRT     |  :heavy_check_mark: GPU <br/> :x: CPU    |
-| ONNX Runtime |  :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU  |   :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU  |
-| TensorFlow   |  :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU  |   :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU  |
-| PyTorch      |  :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU  |   :heavy_check_mark: GPU <br/> :heavy_check_mark: CPU  |
-| Python[^1]   |  :x: GPU <br/> :heavy_check_mark: CPU    |
+| 后端 | Jetson |
+| --- | --- |
+| TensorRT | GPU |
+| ONNX Runtime | GPU / CPU |
+| TensorFlow | GPU / CPU |
+| PyTorch | GPU / CPU |
+| Python | CPU |
 
-
-Look at the [Triton Inference Server Support for Jetson and JetPack](https://github.com/triton-inference-server/server/blob/main/docs/user_guide/jetson.md).
-
+更多信息可参考上游 Triton 文档。
 
 ## AWS Inferentia
 
-Currently, inference on AWS Inferentia is only supported via
-[python backend](https://github.com/triton-inference-server/python_backend#running-with-inferentia)
-where the deployed python script invokes AWS Neuron SDK.
+当前，AWS Inferentia 的推理主要通过 Python backend 实现，由部署的 Python 脚本调用 AWS Neuron SDK 完成。
 
+## 说明
 
-[^1]: The supported devices for Python Backend are mentioned with
-respect to Triton. The python script running in Python Backend can
-be used to execute inference on any hardware if there are available
-python APIs to do so. AWS inferentia is one such example. Triton
-core is largely unaware of the fact that inference will run on
-Inferentia.
-
-[^2]: In case of ARM-SBSA, some operations are not fully supported.
+1. Python Backend 支持的设备范围以 Triton 的描述为准。Python backend 中运行的脚本可以在具备相应 Python API 的硬件上执行推理。
+2. ARM-SBSA 下的部分操作支持仍有局限。

@@ -1,21 +1,21 @@
-# Testing and Verification
+# 运行验证说明
 
-## 一键完整验收
+## 一键完整验证
 
-从项目根目录运行：
+在仓库根目录运行：
 
 ```bash
 cd /home/sunrise/BPU_triton_backend
 ./verify_all.sh
 ```
 
-该脚本是本项目最终验收入口。
+这是本项目的最终验收入口。
 
-## verify_all.sh 执行内容
+## verify_all.sh 的执行内容
 
 ### 1. 外部依赖检查
 
-检查：
+检查以下资源是否可用：
 
 ```text
 /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm
@@ -33,7 +33,7 @@ cmake -S bpu_backend -B build/bpu_backend -DBPU_BACKEND_BUILD_TRITON=ON
 cmake --build build/bpu_backend -j2
 ```
 
-生成：
+预期生成：
 
 ```text
 build/bpu_backend/libtriton_bpu.so
@@ -51,18 +51,18 @@ ctest --test-dir build/bpu_backend --output-on-failure
 - tensor metadata
 - runner args
 - config template
-- `.hbm` model loading
+- `.hbm` 模型加载
 - BPU runtime wrapper
 - runner behavior
 - config stdout
 
-预期：
+预期结果：
 
 ```text
 100% tests passed, 0 tests failed out of 7
 ```
 
-### 4. 运行 Python/package 测试
+### 4. 运行 Python / package 测试
 
 ```bash
 python3 -m pytest examples/realtime_yolo tests -v
@@ -70,21 +70,21 @@ python3 -m pytest examples/realtime_yolo tests -v
 
 测试覆盖：
 
-- Triton HTTP binary tensor request/response
+- Triton HTTP 二进制 tensor 请求 / 响应
 - USB frame validation
-- YOLOv5x input/output contract
-- YOLO output scale metadata parser
-- MJPEG web page and reconnect logic
+- YOLOv5x 输入输出契约
+- YOLO 输出 scale 元数据解析
+- MJPEG 页面与重连逻辑
 - 异步 pipeline 不阻塞网页帧输出
-- package scripts 启动前清理旧服务
+- 脚本启动前清理旧服务
 
-预期：
+预期结果：
 
 ```text
 17 passed
 ```
 
-### 5. Triton HTTP e2e
+### 5. Triton HTTP 端到端验证
 
 脚本：
 
@@ -99,7 +99,7 @@ python3 scripts/triton_e2e/infer_yolov5x_http.py
 - 准备 `yolov5x_bpu` model repository。
 - 启动 Triton Server。
 - 通过 HTTP 调用 `/v2/models/yolov5x_bpu/infer`。
-- 检查 raw output tensor byte sizes。
+- 检查原始输出 tensor 的字节大小。
 
 预期输出：
 
@@ -113,7 +113,7 @@ raw_bytes 9446220 parsed_bytes 9446220 sizes {
 
 ### 6. USB 摄像头 smoke test
 
-验证：
+验证输出：
 
 ```text
 camera_opened True
@@ -122,7 +122,7 @@ camera_read True shape (480, 640, 3)
 
 ### 7. Web endpoint smoke test
 
-临时启动 realtime web harness，验证：
+临时启动实时网页工具链，验证：
 
 ```text
 /health       返回 JSON
@@ -175,7 +175,7 @@ http://192.168.1.154:8080/
 
 ## 验证结论
 
-如果 `./verify_all.sh` 通过，则说明：
+如果 `./verify_all.sh` 通过，说明：
 
 ```text
 源码可编译
@@ -183,5 +183,5 @@ http://192.168.1.154:8080/
 Triton 能加载 bpu backend
 Triton 能通过 HTTP 调用 BPU backend
 BPU 能运行 YOLOv5x .hbm 模型
-USB camera realtime browser validation 能输出视频流
+USB camera 实时网页验证能输出视频流
 ```

@@ -1,24 +1,23 @@
-# Demo Guide
+# 演示与操作指南
 
-本文档用于现场向老师演示本项目。
+本文档说明如何在 RDK S100P 板端运行完整验证和实时网页验证。
 
-## 1. 进入交付目录
+## 1. 进入仓库目录
 
 ```bash
 cd /home/sunrise/BPU_triton_backend
 ```
 
-## 2. 说明项目目标
+## 2. 项目能力概述
 
-可以先向老师说明：
+本项目实现了一个 Triton Server 自定义 C++ backend，backend 名称为 `bpu`。它可以通过 Horizon/D-Robotics DNN/HBRT runtime 调用 RDK S100P 板载 BPU，运行 `.hbm` 模型。
 
-```text
-本项目实现了一个 Triton Server 自定义 C++ backend，backend 名称为 bpu。
-它可以通过 Horizon/D-Robotics DNN/HBRT runtime 调用 RDK S100P 板载 BPU，运行 .hbm 模型。
-项目提供了 YOLOv5x 模型的 Triton HTTP e2e 验证，以及 USB 摄像头实时网页验证。
-```
+项目提供两类验证：
 
-## 3. 完整验收演示
+- YOLOv5x 模型的 Triton HTTP 端到端验证。
+- USB 摄像头实时网页验证。
+
+## 3. 完整验证
 
 运行：
 
@@ -26,7 +25,7 @@ cd /home/sunrise/BPU_triton_backend
 ./verify_all.sh
 ```
 
-老师可以看到脚本依次完成：
+脚本会依次完成：
 
 ```text
 [1/7] Build BPU backend
@@ -44,7 +43,7 @@ cd /home/sunrise/BPU_triton_backend
 All BPU Triton backend deliverable checks passed.
 ```
 
-## 4. 实时网页演示
+## 4. 实时网页验证
 
 运行：
 
@@ -60,9 +59,7 @@ http://192.168.1.154:8080/
 
 页面显示 USB 摄像头实时画面和 YOLO 检测框。
 
-## 5. 说明实时链路
-
-可以向老师说明实时链路：
+## 5. 实时链路说明
 
 ```text
 USB camera /dev/video0
@@ -77,7 +74,7 @@ USB camera /dev/video0
   -> MJPEG browser stream
 ```
 
-其中推理一定经过 Triton Server 和自定义 `bpu` backend，网页部分只是验证和展示。
+推理路径会经过 Triton Server 和自定义 `bpu` backend；网页部分用于可视化验证。
 
 ## 6. 查看 Triton 状态
 
@@ -97,17 +94,17 @@ inputs:  data_y, data_uv
 outputs: output, 1310, 1312
 ```
 
-## 7. 停止演示
+## 7. 停止服务
 
 ```bash
 ./stop_services.sh
 ```
 
-## 8. 老师可能关注的问题
+## 8. 常见检查点
 
 ### 是否真的走了 BPU？
 
-是。Triton 日志中会看到：
+是。Triton 日志中可看到：
 
 ```text
 Backend: bpu
@@ -119,15 +116,15 @@ model yolov5x_bpu READY
 
 ### 模型在哪里？
 
-模型不复制进交付目录，使用板载模型：
+模型不复制进仓库，使用板载模型：
 
 ```text
 /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm
 ```
 
-Triton model repository 里通过 symlink 引用它。
+Triton model repository 通过 symlink 引用它。
 
-### 为什么网页不卡？
+### 为什么网页显示不容易卡顿？
 
 实时网页使用异步 pipeline：
 

@@ -1,57 +1,57 @@
-# BPU Triton Backend Deliverable Manifest
+# BPU Triton Backend 交付清单
 
-## Package path
+## 交付目录
 
 ```text
 /home/sunrise/BPU_triton_backend
 ```
 
-Purpose: standalone source deliverable for the RDK S100P Triton `bpu` backend plus HTTP realtime YOLO validation harness.
+本仓库是面向 RDK S100P Triton `bpu` backend 的独立交付包，同时包含 HTTP 实时 YOLO 验证工具链。
 
-## Included source and scripts
-
-```text
-bpu_backend/                      Triton backend source, runner, and C++ tests
-examples/yolov5x/                 YOLOv5x model repository config and input preparation
-examples/realtime_yolo/           Realtime USB camera HTTP validation harness
-scripts/triton_e2e/               Triton startup/shutdown and HTTP e2e validation
-tests/                            Package script tests
-docs/                             Project summary, architecture, implementation, testing, demo docs
-README.md                         Project overview and teacher-facing entry point
-MANIFEST.md                       This manifest
-verify_all.sh                     Full reproducibility verification
-run_realtime_yolo.sh              Starts Triton and realtime web harness
-stop_services.sh                  Stops Triton and realtime web harness
-```
-
-## Documentation map
+## 包含内容
 
 ```text
-docs/PROJECT_SUMMARY.md           What was built and why
-docs/ARCHITECTURE.md              Triton -> bpu backend -> BPU architecture
-docs/IMPLEMENTATION_NOTES.md      Important source files and implementation details
-docs/TESTING.md                   Test scripts, expected outputs, and validation meaning
-docs/DEMO_GUIDE.md                Short guide for teacher-facing live demo
-docs/bpu_backend_build.md         Backend build notes
-docs/triton_server_on_rdk_s100p.md Triton Server setup on RDK S100P
-docs/backend_platform_support_matrix.md Platform support notes
-docs/realtime_validation_harness_design.md Realtime validation harness design
+bpu_backend/                      Triton backend 源码、运行时和 C++ 测试
+examples/yolov5x/                 YOLOv5x model repository 配置和输入准备脚本
+examples/realtime_yolo/           实时 USB 摄像头 HTTP 验证工具链
+scripts/triton_e2e/               Triton 启停和 HTTP 端到端验证脚本
+tests/                            仓库脚本测试
+docs/                             项目概览、架构、实现、测试、演示文档
+README.md                         项目入口说明
+MANIFEST.md                       本清单
+verify_all.sh                     完整可复现验证脚本
+run_realtime_yolo.sh              启动 Triton 与实时网页验证
+stop_services.sh                  停止 Triton 与网页验证
 ```
 
-## External dependencies not vendored
+## 文档索引
 
-These are expected to exist on the target RDK S100P board:
+```text
+docs/PROJECT_SUMMARY.md            项目完成内容和目标
+docs/ARCHITECTURE.md              Triton -> bpu backend -> BPU 的整体架构
+docs/IMPLEMENTATION_NOTES.md      关键源码和实现细节
+docs/TESTING.md                   测试脚本、预期输出和验证含义
+docs/DEMO_GUIDE.md                公开演示与操作说明
+docs/bpu_backend_build.md         后端构建与验证说明
+docs/triton_server_on_rdk_s100p.md RDK S100P 上的 Triton Server 部署说明
+docs/backend_platform_support_matrix.md 平台支持矩阵说明
+docs/realtime_validation_harness_design.md 实时验证工具链设计说明
+```
 
-| Dependency | Path | Notes |
+## 外部依赖
+
+以下依赖不随仓库一并提交，目标板上应已具备：
+
+| 依赖 | 路径 | 说明 |
 | --- | --- | --- |
-| YOLOv5x HBM model | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` | Board-provided model; referenced by symlink in the Triton model repository. |
-| Triton Server distribution | `/home/sunrise/triton_backend_BPU/tritonserver_dist` | Official Triton Server aarch64 standalone package with local no-GPU CUDA/DCGM stubs. Override with `TRITON_DIST_DIR=/path`. |
-| DNN runtime | `/usr/hobot/lib/libdnn.so` | Horizon/D-Robotics DNN runtime. |
-| HBRT runtime | `/usr/hobot/lib/libhbrt4.so` | Horizon/D-Robotics HBRT runtime. |
-| BPU device | `/dev/bpu`, `/dev/bpu_core0` | Required for BPU inference. |
-| USB camera | `/dev/video0` | Required for realtime browser validation. Override with `VIDEO_DEVICE=/dev/videoX`. |
+| YOLOv5x HBM 模型 | `/opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm` | 板端提供的模型，仓库通过符号链接引用。 |
+| Triton Server 分发包 | `/home/sunrise/triton_backend_BPU/tritonserver_dist` | 用于本地验证的 Triton Server aarch64 独立包。 |
+| DNN 运行时 | `/usr/hobot/lib/libdnn.so` | Horizon/D-Robotics DNN 运行时。 |
+| HBRT 运行时 | `/usr/hobot/lib/libhbrt4.so` | Horizon/D-Robotics HBRT 运行时。 |
+| BPU 设备 | `/dev/bpu`, `/dev/bpu_core0` | BPU 推理所需设备节点。 |
+| USB 摄像头 | `/dev/video0` | 实时网页验证所需输入源。 |
 
-## Verified versions observed on this board
+## 已验证版本
 
 ```text
 Triton Server: 2.69.0
@@ -62,26 +62,26 @@ OS:            Ubuntu 22.04.5 LTS / RDK OS 4.0.2-Beta
 Board:         D-Robotics RDK S100 V1P0
 ```
 
-## Primary success criteria
+## 主要验收标准
 
-`./verify_all.sh` should report:
+运行 `./verify_all.sh` 后应满足：
 
-- C++ backend tests: `100% tests passed, 0 tests failed out of 7`
-- Python realtime/package tests: `17 passed`
-- Triton HTTP inference output sizes:
+- C++ 后端测试：`100% tests passed, 0 tests failed out of 7`
+- Python 实时和脚本测试：`17 passed`
+- Triton HTTP 输出尺寸：
   - `output`: `7197120`
   - `1310`: `1799280`
   - `1312`: `449820`
-- USB camera opens and returns a BGR frame.
-- Web `/health` returns JSON.
-- Web `/stream.mjpg` returns multipart JPEG data.
+- USB 摄像头可打开并返回 BGR 帧。
+- Web `/health` 返回 JSON。
+- 网页 `/stream.mjpg` 返回 multipart JPEG 数据。
 
-## Model handling
+## 模型处理方式
 
-The package does not copy the `.hbm` model. `examples/yolov5x/make_symlink.sh` creates the Triton model repository symlink:
+仓库不直接拷贝 `.hbm` 模型文件，而是通过符号链接引用板端模型：
 
 ```text
 examples/yolov5x/model_repository/yolov5x_bpu/1/model.hbm -> /opt/hobot/model/s100/basic/yolov5x_672x672_nv12.hbm
 ```
 
-This keeps the deliverable lightweight and tied to the board-provided validated model.
+这样可以保持交付包轻量，并与板端已验证模型保持一致。

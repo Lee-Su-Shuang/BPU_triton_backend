@@ -1,6 +1,6 @@
-# BPU Backend Build and Validation
+# BPU 后端构建与验证
 
-## Build
+## 构建
 
 ```bash
 cmake -S bpu_backend -B build/bpu_backend -DBPU_BACKEND_BUILD_TRITON=ON
@@ -8,14 +8,14 @@ cmake --build build/bpu_backend -j2
 ctest --test-dir build/bpu_backend --output-on-failure
 ```
 
-Expected outputs:
+预期生成文件：
 
 ```text
 build/bpu_backend/bpu_runner
 build/bpu_backend/libtriton_bpu.so
 ```
 
-## Metadata validation
+## 元数据验证
 
 ```bash
 ./build/bpu_backend/bpu_runner \
@@ -23,14 +23,14 @@ build/bpu_backend/libtriton_bpu.so
   --print-metadata
 ```
 
-Expected inputs:
+预期输入：
 
 ```text
 data_y UINT8 [1,672,672,1]
 data_uv UINT8 [1,336,336,2]
 ```
 
-Expected outputs:
+预期输出：
 
 ```text
 output INT32 [1,84,84,255]
@@ -38,7 +38,7 @@ output INT32 [1,84,84,255]
 1312 INT32 [1,21,21,255]
 ```
 
-## Runner inference validation
+## 本地 runner 推理验证
 
 ```bash
 python3 examples/yolov5x/prepare_input.py /path/to/image.jpg --out-dir tmp_inputs
@@ -49,7 +49,7 @@ python3 examples/yolov5x/prepare_input.py /path/to/image.jpg --out-dir tmp_input
   --dump-output tmp_outputs
 ```
 
-Expected output files:
+预期输出文件：
 
 ```text
 tmp_outputs/output.bin
@@ -57,15 +57,15 @@ tmp_outputs/1310.bin
 tmp_outputs/1312.bin
 ```
 
-## Triton backend install layout
+## Triton 后端安装路径
 
-When `tritonserver` is available, install the backend as:
+当 `tritonserver` 可用时，后端应安装到：
 
 ```text
 /opt/tritonserver/backends/bpu/libtriton_bpu.so
 ```
 
-A model uses it with:
+模型配置中使用：
 
 ```protobuf
 backend: "bpu"

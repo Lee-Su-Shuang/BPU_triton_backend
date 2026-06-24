@@ -1,4 +1,4 @@
-# System Architecture
+# 系统架构
 
 ## 总体架构
 
@@ -50,14 +50,14 @@ bpu_backend/
 - 获取模型名称。
 - 获取输入 tensor metadata。
 - 获取输出 tensor metadata。
-- 把 DNN tensor properties 转换为 backend 内部 `TensorMeta`。
+- 把 DNN tensor 属性转换为后端内部 `TensorMeta`。
 
 ### BpuRuntime
 
 职责：
 
 - 接收输入 raw buffers。
-- 分配/准备 DNN tensor。
+- 分配和准备 DNN tensor。
 - 调用 BPU runtime 执行同步推理。
 - 收集输出 raw buffers。
 
@@ -68,7 +68,7 @@ bpu_backend/
 - 实现 Triton backend lifecycle。
 - 在 ModelInitialize 阶段加载 `.hbm`。
 - 在 ModelInstanceExecute 阶段处理 Triton requests。
-- 从 Triton request 中收集 CPU input buffers。
+- 从 Triton 请求中收集 CPU 输入缓冲区。
 - 调用 `BpuRuntime::Infer`。
 - 创建 Triton response outputs。
 - 写回 raw output tensors。
@@ -92,7 +92,7 @@ input:  data_y, data_uv
 output: output, 1310, 1312
 ```
 
-## HTTP e2e 验证链路
+## HTTP 端到端验证链路
 
 ```text
 infer_yolov5x_http.py
@@ -126,7 +126,7 @@ USB camera /dev/video0
   -> browser
 ```
 
-为了降低网页卡顿，实时验证 harness 采用异步 pipeline：
+为了降低网页卡顿，实时验证工具链采用异步 pipeline：
 
 ```text
 Capture thread:
